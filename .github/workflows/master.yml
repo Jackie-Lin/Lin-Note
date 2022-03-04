@@ -1,0 +1,35 @@
+name: CI
+on: 
+  push:
+    branshes: [master]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: actions/checkout@2
+      uses: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: "14.x"
+      # 这里是node_modules的缓存，用来加速node的后续的构建
+      - name: Cache node modules
+        uses: actions/cache@v1
+        id: cache
+        with:
+          path: node_mpdules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json')}}
+          restore-keys: 
+            ${{ runner.os }}-node-
+        - name: Install Dependencies
+          if: steps.cache.outputs.cache-hit != 'true'
+          run: npm i
+        - name: Generates Pages
+          run: |
+            npm run build
+        - name: Deploy Github Pages🚀
+        uses: JamesIves/github-pages-deploy-action@v4.2.5
+        with:
+          repository-name: jackie-lin.github.io/Lin-Note
+          branch: master
+          folder: ./src//vuepress/dist
+          ssh-key: ${{ sectets.DEPLOY_KEY}}
