@@ -31,5 +31,5 @@ jobs:
         with:
           repository-name: jackie-lin.github.io/Lin-Note
           branch: master
-          folder: ./src//vuepress/dist
+          folder: ./docs/note
           ssh-key: ${{ sectets.DEPLOY_KEY}}
