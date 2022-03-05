@@ -110,19 +110,19 @@ jobs:
 
 操作步骤比较简单，直接按图片步骤操作就行
 
-![1646465187-merged](http://wngz.club/1646465187-merged.png)
+![1646465187-merged](../../public/1646465187-merged.png)
 
- ![image-20220305153023405](http://wngz.club/image-20220305153023405.png)
+ ![image-20220305153023405](../../public/image-20220305153023405.png)
 
-![image-20220305153040021](http://wngz.club/image-20220305153040021.png)
+![image-20220305153040021](../../public/image-20220305153040021.png)
 
-![image-20220305153057660](http://wngz.club/image-20220305153057660.png)
+![image-20220305153057660](../../public/image-20220305153057660.png)
 
-![image-20220305153110368](http://wngz.club/image-20220305153110368.png)
+![image-20220305153110368](../../public/image-20220305153110368.png)
 
 ![image-20220305153535667](http://wngz.club/image-20220305153535667.png)
 
-![image-20220305153546954](http://wngz.club/image-20220305153546954.png)
+![image-20220305153546954](../../public/image-20220305153546954.png)
 
-![image-20220305153557334](http://wngz.club/image-20220305153557334.png)
+![image-20220305153557334](../../public/image-20220305153557334.png)
 
