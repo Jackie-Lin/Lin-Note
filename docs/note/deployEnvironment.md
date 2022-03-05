@@ -4,7 +4,7 @@
 
 首先需要在你的项目下新建 `.github/workflows/` 文件夹，接着在 `workflows` 文件夹下新增 `xxx.yml` 文件，这个文件名随意，但是必须是 `yaml` 文件，比如我新增文件名为 `master.yml`，
 
-![image-20220305143915867](http://wngz.club/image-20220305143915867.png)
+![image-20220305143915867](../../public/image-20220305143915867.png)
 
 并在 `master.yml` 输入以下配置内容
 
