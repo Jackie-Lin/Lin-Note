@@ -1,35 +1,25 @@
-name: CI
-on: 
+name: Build and Deploy
+on:
   push:
-    branshes: [master]
+    branches:
+      - master
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: "16.x"
-      # 这里是node_modules的缓存，用来加速node的后续的构建
-      - name: Cache node modules
-        uses: actions/cache@v1
-        id: cache
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2.3.1
+
+      - name: Install and Build 🔧 
+        run: |
+          npm install
+          npm run build
+        env:
+          NODE_OPTIONS: '--max_old_space_size=4096'
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@4.1.3
         with:
-          path: node_mpdules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json')}}
-          restore-keys: 
-            ${{ runner.os }}-node-
-        - name: Install Dependencies
-          if: steps.cache.outputs.cache-hit != 'true'
-          run: npm i
-        - name: Generates Pages
-          run: |
-            npm run build
-        - name: Deploy Github Pages🚀
-        uses: JamesIves/github-pages-deploy-action@v4.2.5
-        with:
-          repository-name: jackie-lin.github.io/Lin-Note
-          branch: master
-          folder: ./docs/note
-          ssh-key: ${{ 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 }}
+          BRANCH: gh-pages
+          FOLDER: docs/.vuepress/dist
+          ACCESS_TOKEN: ${{ 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 }}
