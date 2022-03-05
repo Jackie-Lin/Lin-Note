@@ -32,4 +32,4 @@ jobs:
           repository-name: jackie-lin.github.io/Lin-Note
           branch: master
           folder: ./docs/note
-          ssh-key: ${{ sectets.DEPLOY_KEY}}
+          ssh-key: ${{ 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 }}
