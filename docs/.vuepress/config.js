@@ -12,7 +12,10 @@ module.exports = {
       }],
       sidebar: [
         '/',
-        '/note/deployEnvironment'
+        '/note/deployEnvironment',
+        '/note/跨域处理',
+        '/note/CentOS 7 真机安装实测',
+        '/note/typroa使用心得',
       ]
     }
   }
