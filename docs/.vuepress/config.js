@@ -1,6 +1,7 @@
 // .vuepress/config.js
 module.exports = {
-    title:'Lin-Note',
+    title: 'Hello Lin-Note',
+    description: '这是一次测试',
     base:'/Lin-Note/',
     themeConfig: {
       nav:[{
