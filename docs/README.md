@@ -1,18 +1,16 @@
-```yaml
 ---
-home: true
-heroImage: /hero.png
-heroText: Hero 标题
-tagline: Hero 副标题
-actionText: 快速上手 →
-actionLink: /guide/
-features:
-- title: 简洁至上
-  details: 以 Markdown 为中心的项目结构，以最少的配置帮助你专注于写作。
-- title: Vue驱动
-  details: 享受 Vue + webpack 的开发体验，在 Markdown 中使用 Vue 组件，同时可以使用 Vue 来开发自定义主题。
-- title: 高性能
-  details: VuePress 为每个页面预渲染生成静态的 HTML，同时在页面被加载的时候，将作为 SPA 运行。
-footer: MIT Licensed | Copyright © 2018-present Evan You
+  home: true
+  # heroImage: /hero.png
+  heroText: Hello Lin
+  # tagline: Hero 副标题
+  actionText: 开始旅程 →
+  actionLink: /note/
+  features:
+  - title: 面试
+    details: 梳理常见的前端面试题
+  - title: 笔记
+    details: 记录开发日常, 开发日常的点点滴滴
+  - title: 大前端
+    details: 明确自己的学习目标，然后以目标为导向
+  # footer: MIT Licensed | Copyright © 2018-present Evan You
 ---
-```
