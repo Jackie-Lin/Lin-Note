@@ -2,10 +2,10 @@
 module.exports = {
   title: "Hello Lin-Note", // 设置网站标题
   description: "艮山的个人博客",
-  base: "/", // 设置站点根路径
+  base: "/Lin-Note/", // 设置站点根路径
   // dest: "./ROOT", // 设置输出目录
-  head: [],
-  plugins: [],
+  // head: [],
+  // plugins: [],
   themeConfig: {
     nav: [
       { text: "主页", link: "/" },
