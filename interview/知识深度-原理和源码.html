@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>1. JS 内存垃圾回收用什么算法 | Hello Lin-Note</title>
+    <meta name="generator" content="VuePress 1.9.7">
+    
+    <meta name="description" content="艮山的个人博客">
+    
+    <link rel="preload" href="/assets/css/0.styles.e4d8b86b.css" as="style"><link rel="preload" href="/assets/js/app.dfba7f66.js" as="script"><link rel="preload" href="/assets/js/2.d548555d.js" as="script"><link rel="preload" href="/assets/js/15.3145e545.js" as="script"><link rel="prefetch" href="/assets/js/10.ede08b31.js"><link rel="prefetch" href="/assets/js/11.0dd35d6c.js"><link rel="prefetch" href="/assets/js/12.71a941ed.js"><link rel="prefetch" href="/assets/js/13.dc05e616.js"><link rel="prefetch" href="/assets/js/14.85b623e2.js"><link rel="prefetch" href="/assets/js/16.cf4c08b4.js"><link rel="prefetch" href="/assets/js/17.a30fc430.js"><link rel="prefetch" href="/assets/js/18.fd631f76.js"><link rel="prefetch" href="/assets/js/19.c0db0535.js"><link rel="prefetch" href="/assets/js/20.75b374c9.js"><link rel="prefetch" href="/assets/js/21.530371df.js"><link rel="prefetch" href="/assets/js/22.5d5ff72d.js"><link rel="prefetch" href="/assets/js/23.f0bdf90a.js"><link rel="prefetch" href="/assets/js/24.437f0b34.js"><link rel="prefetch" href="/assets/js/25.4a28de33.js"><link rel="prefetch" href="/assets/js/26.ababd577.js"><link rel="prefetch" href="/assets/js/27.3e6655f4.js"><link rel="prefetch" href="/assets/js/28.5e3ae0cc.js"><link rel="prefetch" href="/assets/js/29.6ab5ffd8.js"><link rel="prefetch" href="/assets/js/3.545323ea.js"><link rel="prefetch" href="/assets/js/4.a85bdc41.js"><link rel="prefetch" href="/assets/js/5.400b6944.js"><link rel="prefetch" href="/assets/js/6.a3132ce2.js"><link rel="prefetch" href="/assets/js/7.42fc7cf9.js"><link rel="prefetch" href="/assets/js/8.40aa9f7f.js"><link rel="prefetch" href="/assets/js/9.1674b5d3.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.e4d8b86b.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">Hello Lin-Note</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">
+  主页
+</a></div><div class="nav-item"><a href="/bigFront/" class="nav-link">
+  大前端
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="开发工具" class="dropdown-title"><span class="title">开发工具</span> <span class="arrow down"></span></button> <button type="button" aria-label="开发工具" class="mobile-dropdown-title"><span class="title">开发工具</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/developmentTool/vscode 插件篇.html" class="nav-link">
+  vscode 插件篇
+</a></li><li class="dropdown-item"><!----> <a href="/developmentTool/vscode 常用快捷键.html" class="nav-link">
+  vscode 常用快捷键
+</a></li><li class="dropdown-item"><!----> <a href="/developmentTool/typroa使用心得.html" class="nav-link">
+  Typora
+</a></li><li class="dropdown-item"><!----> <a href="/developmentTool/git 版本管理相关知识点.html" class="nav-link">
+  Git
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="学习笔记" class="dropdown-title"><span class="title">学习笔记</span> <span class="arrow down"></span></button> <button type="button" aria-label="学习笔记" class="mobile-dropdown-title"><span class="title">学习笔记</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/note/TypeScript 笔记.html" class="nav-link">
+  入门
+</a></li><li class="dropdown-item"><!----> <a href="/note/CentOS 7 真机安装实测.html" class="nav-link">
+  CentOS 7
+</a></li><li class="dropdown-item"><!----> <a href="/note/跨域处理.html" class="nav-link">
+  跨域
+</a></li><li class="dropdown-item"><!----> <a href="/note/垃圾的小米路由器 bug.html" class="nav-link">
+  小米路由器
+</a></li></ul></div></div><div class="nav-item"><a href="/inspiration/" class="nav-link">
+  开发心得
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="前端面试" class="dropdown-title"><span class="title">前端面试</span> <span class="arrow down"></span></button> <button type="button" aria-label="前端面试" class="mobile-dropdown-title"><span class="title">前端面试</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><h4>
+          分类面试题
+        </h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/interview/基础 面试题.html" class="nav-link">
+  基础面
+</a></li><li class="dropdown-subitem"><a href="/interview/软技能-沟通、总结和学习能力.html" class="nav-link">
+  软技能
+</a></li><li class="dropdown-subitem"><a href="/interview/实践工作经验-是否做过真实项目.html" class="nav-link">
+  实践经验
+</a></li><li class="dropdown-subitem"><a href="/interview/项目设计-能否成为项目负责人.html" class="nav-link">
+  项目设计
+</a></li><li class="dropdown-subitem"><a href="/interview/知识广度-从前端到全栈.html" class="nav-link">
+  知识广度
+</a></li><li class="dropdown-subitem"><a href="/interview/知识深度-原理和源码.html" class="nav-link">
+  知识深度
+</a></li><li class="dropdown-subitem"><a href="/interview/编写高质量代码-正确、完整、清晰、鲁棒.html" class="nav-link">
+  编写代码
+</a></li><li class="dropdown-subitem"><a href="/interview/分析和解决问题的思路-可以独立解决问题.html" class="nav-link">
+  分析能力
+</a></li></ul></li></ul></div></div><div class="nav-item"><a href="https://github.com/Jackie-Lin/Lin-UI/tree/master" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  GitHub
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div><div class="nav-item"><a href="https://www.npmjs.com/package/lin-ui2" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Npm
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">
+  主页
+</a></div><div class="nav-item"><a href="/bigFront/" class="nav-link">
+  大前端
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="开发工具" class="dropdown-title"><span class="title">开发工具</span> <span class="arrow down"></span></button> <button type="button" aria-label="开发工具" class="mobile-dropdown-title"><span class="title">开发工具</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/developmentTool/vscode 插件篇.html" class="nav-link">
+  vscode 插件篇
+</a></li><li class="dropdown-item"><!----> <a href="/developmentTool/vscode 常用快捷键.html" class="nav-link">
+  vscode 常用快捷键
+</a></li><li class="dropdown-item"><!----> <a href="/developmentTool/typroa使用心得.html" class="nav-link">
+  Typora
+</a></li><li class="dropdown-item"><!----> <a href="/developmentTool/git 版本管理相关知识点.html" class="nav-link">
+  Git
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="学习笔记" class="dropdown-title"><span class="title">学习笔记</span> <span class="arrow down"></span></button> <button type="button" aria-label="学习笔记" class="mobile-dropdown-title"><span class="title">学习笔记</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/note/TypeScript 笔记.html" class="nav-link">
+  入门
+</a></li><li class="dropdown-item"><!----> <a href="/note/CentOS 7 真机安装实测.html" class="nav-link">
+  CentOS 7
+</a></li><li class="dropdown-item"><!----> <a href="/note/跨域处理.html" class="nav-link">
+  跨域
+</a></li><li class="dropdown-item"><!----> <a href="/note/垃圾的小米路由器 bug.html" class="nav-link">
+  小米路由器
+</a></li></ul></div></div><div class="nav-item"><a href="/inspiration/" class="nav-link">
+  开发心得
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="前端面试" class="dropdown-title"><span class="title">前端面试</span> <span class="arrow down"></span></button> <button type="button" aria-label="前端面试" class="mobile-dropdown-title"><span class="title">前端面试</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><h4>
+          分类面试题
+        </h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/interview/基础 面试题.html" class="nav-link">
+  基础面
+</a></li><li class="dropdown-subitem"><a href="/interview/软技能-沟通、总结和学习能力.html" class="nav-link">
+  软技能
+</a></li><li class="dropdown-subitem"><a href="/interview/实践工作经验-是否做过真实项目.html" class="nav-link">
+  实践经验
+</a></li><li class="dropdown-subitem"><a href="/interview/项目设计-能否成为项目负责人.html" class="nav-link">
+  项目设计
+</a></li><li class="dropdown-subitem"><a href="/interview/知识广度-从前端到全栈.html" class="nav-link">
+  知识广度
+</a></li><li class="dropdown-subitem"><a href="/interview/知识深度-原理和源码.html" class="nav-link">
+  知识深度
+</a></li><li class="dropdown-subitem"><a href="/interview/编写高质量代码-正确、完整、清晰、鲁棒.html" class="nav-link">
+  编写代码
+</a></li><li class="dropdown-subitem"><a href="/interview/分析和解决问题的思路-可以独立解决问题.html" class="nav-link">
+  分析能力
+</a></li></ul></li></ul></div></div><div class="nav-item"><a href="https://github.com/Jackie-Lin/Lin-UI/tree/master" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  GitHub
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div><div class="nav-item"><a href="https://www.npmjs.com/package/lin-ui2" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Npm
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>分类面试题</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/interview/基础 面试题.html" class="sidebar-link">基础 面试题</a></li><li><a href="/interview/软技能-沟通、总结和学习能力.html" class="sidebar-link">软技能</a></li><li><a href="/interview/实践工作经验-是否做过真实项目.html" class="sidebar-link">实践经验</a></li><li><a href="/interview/项目设计-能否成为项目负责人.html" class="sidebar-link">项目设计</a></li><li><a href="/interview/知识广度-从前端到全栈.html" class="sidebar-link">知识广度</a></li><li><a href="/interview/知识深度-原理和源码.html" class="active sidebar-link">知识深度</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/interview/知识深度-原理和源码.html#_1-js-内存垃圾回收用什么算法" class="sidebar-link">1. JS 内存垃圾回收用什么算法</a></li><li class="sidebar-sub-header"><a href="/interview/知识深度-原理和源码.html#_2-js-内存泄漏如何检测-场景有哪些" class="sidebar-link">2. JS 内存泄漏如何检测？场景有哪些？</a></li><li class="sidebar-sub-header"><a href="/interview/知识深度-原理和源码.html#_3-浏览器-和-node-js-的-event-loop-有什么区别" class="sidebar-link">3. 浏览器 和 node.js 的 event loop 有什么区别？</a></li><li class="sidebar-sub-header"><a href="/interview/知识深度-原理和源码.html#_4-vdom-真的很快吗" class="sidebar-link">4. vdom 真的很快吗？</a></li><li class="sidebar-sub-header"><a href="/interview/知识深度-原理和源码.html#_5-遍历一个数组用-for-和-foreach-哪个更快" class="sidebar-link">5. 遍历一个数组用 for 和 forEach 哪个更快？</a></li><li class="sidebar-sub-header"><a href="/interview/知识深度-原理和源码.html#_6-nodejs-如何开启进程-进程如何通讯" class="sidebar-link">6. nodejs 如何开启进程，进程如何通讯？</a></li><li class="sidebar-sub-header"><a href="/interview/知识深度-原理和源码.html#_7-请描述-js-bridge-的实现原理" class="sidebar-link">7. 请描述 js-bridge 的实现原理</a></li><li class="sidebar-sub-header"><a href="/interview/知识深度-原理和源码.html#_8-requestidlecallback-和-request" class="sidebar-link">8. requestIdleCallback 和 request</a></li><li class="sidebar-sub-header"><a href="/interview/知识深度-原理和源码.html#_9-vue-每个生命周期都做了什么" class="sidebar-link">9. Vue 每个生命周期都做了什么？</a></li><li class="sidebar-sub-header"><a href="/interview/知识深度-原理和源码.html#_10-vue2、vue3、react-三者-diff-算法有何区别" class="sidebar-link">10. Vue2、Vue3、React 三者 diff 算法有何区别？</a></li><li class="sidebar-sub-header"><a href="/interview/知识深度-原理和源码.html#_11-vue-router-memoryhistory-abstract" class="sidebar-link">11. Vue-router MemoryHistory (abstract)</a></li></ul></li><li><a href="/interview/编写高质量代码-正确、完整、清晰、鲁棒.html" class="sidebar-link">编写代码</a></li><li><a href="/interview/分析和解决问题的思路-可以独立解决问题.html" class="sidebar-link">分析能力</a></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h2 id="_1-js-内存垃圾回收用什么算法"><a href="#_1-js-内存垃圾回收用什么算法" class="header-anchor">#</a> 1. JS 内存垃圾回收用什么算法</h2> <p>垃圾回收</p> <ul><li>哪些不会被垃圾回收？</li></ul> <p>-- 不会被垃圾回收 --</p> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token comment">// window 对象的属性 不会被回收</span>
+
+<span class="token comment">// 闭包内存 不会回收</span>
+<span class="token keyword">function</span> <span class="token function">getDataFns</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> data <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span> <span class="token comment">//闭包</span>
+  <span class="token keyword">return</span> <span class="token punctuation">{</span>
+    <span class="token function">get</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> data<span class="token punctuation">[</span>key<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token function">set</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      data<span class="token punctuation">[</span>key<span class="token punctuation">]</span> <span class="token operator">=</span> value<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">const</span> <span class="token punctuation">{</span> get<span class="token punctuation">,</span> set <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">getDataFns</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">set</span><span class="token punctuation">(</span><span class="token string">&quot;x&quot;</span><span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">get</span><span class="token punctuation">(</span><span class="token string">&quot;x&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>垃圾回收的算法</p> <ul><li>引用计数（之前 ，引用计数 等于 0，就会被回收）</li> <li>标记清除（现代，从 window <code>根</code> 逐步开始遍历，能找到就保留，不能找到就删除）</li></ul> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token comment">// 循环引用可能导致的内存泄露</span>
+<span class="token comment">// IE6-7 内存泄漏的 bug</span>
+<span class="token keyword">var</span> div1 <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">&quot;div1&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+div1<span class="token punctuation">.</span>a <span class="token operator">=</span> div1<span class="token punctuation">;</span>
+div1<span class="token punctuation">.</span>someBigData <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre></div><blockquote><p>闭包是内存泄漏吗？</p> <ul><li>闭包不是内存泄漏，因为闭包的数据是不可以被回收的</li></ul></blockquote> <h2 id="_2-js-内存泄漏如何检测-场景有哪些"><a href="#_2-js-内存泄漏如何检测-场景有哪些" class="header-anchor">#</a> 2. JS 内存泄漏如何检测？场景有哪些？</h2> <p>检测内存变化（浏览器如何操作？）</p> <p><img src="/assets/img/image-20230109175255221-1675343113378-7.3f9a7b56.png" alt="image-20230109175255221"></p> <p>内存泄漏的场景有哪些？（Vue 为例）</p> <ul><li>被全局变量、函数引用，组件销毁时未清除</li> <li>被全局事件、定时器引用，组件销毁时未清除</li> <li>被自定义事件引用，组件销毁时未清除</li></ul> <div class="language-vue extra-class"><pre class="language-vue"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">&gt;</span></span><span class="token script"><span class="token language-javascript">
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">{</span>
+  <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">&quot;Memory Leak Demo&quot;</span><span class="token punctuation">,</span>
+  <span class="token function">data</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token punctuation">{</span>
+      <span class="token literal-property property">arr</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">,</span> <span class="token number">30</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token comment">// 数组 对象</span>
+      <span class="token literal-property property">intervalId</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">methods</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token function">printArr</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>arr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token function">mounted</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 全局变量</span>
+    window<span class="token punctuation">.</span>arr <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>arr<span class="token punctuation">;</span>
+    <span class="token comment">// 函数引用</span>
+    window<span class="token punctuation">.</span><span class="token function-variable function">printArr</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>arr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token comment">// 定时器引用</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>intervalId <span class="token operator">=</span> <span class="token function">setInterval</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>printArr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 全局事件</span>
+    window<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">&quot;resize&quot;</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>printArr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token comment">// Vue2 - beforeDestroy</span>
+  <span class="token function">beforeUnmount</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 全局变量 销毁</span>
+    window<span class="token punctuation">.</span>arr <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token comment">// 函数引用 销毁</span>
+    window<span class="token punctuation">.</span>printArr <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token comment">// 定时器引用 销毁</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>intervalId<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token function">clearInterval</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>intervalId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment">// 全局事件 销毁</span>
+    window<span class="token punctuation">.</span><span class="token function">removeEventListener</span><span class="token punctuation">(</span><span class="token string">&quot;resize&quot;</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>printArr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span>
+</code></pre></div><blockquote><p>扩展</p> <ul><li>weakMap() 、weakSet 都是弱引用，有可能被垃圾回收清除掉</li></ul></blockquote> <h2 id="_3-浏览器-和-node-js-的-event-loop-有什么区别"><a href="#_3-浏览器-和-node-js-的-event-loop-有什么区别" class="header-anchor">#</a> 3. 浏览器 和 node.js 的 event loop 有什么区别？</h2> <p>单线程 和 异步</p> <ul><li>JS 是单线程的（无论在浏览器还是 node.js）</li> <li>浏览器中 JS 执行 和 DOM 渲染共用一个线程</li> <li>异步（JS 单线程的解决方案）</li></ul> <p>宏任务 和 微任务</p> <ul><li><p>宏任务，如 setTimeout setInterval 网络请求</p></li> <li><p>微任务，如 promise async/await</p></li> <li><p>微任务在下一轮 DOM 渲染之前执行，宏任务在之后执行</p></li></ul> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token keyword">const</span> p <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">&quot;p&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+p<span class="token punctuation">.</span>innerHTML <span class="token operator">=</span> <span class="token string">&quot;new paragraph&quot;</span><span class="token punctuation">;</span>
+document<span class="token punctuation">.</span>body<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> list <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementsByTagName</span><span class="token punctuation">(</span><span class="token string">&quot;p&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">&quot;length----&quot;</span><span class="token punctuation">,</span> list<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">&quot;start&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// 渲染之后</span>
+<span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> list <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementsByTagName</span><span class="token punctuation">(</span><span class="token string">&quot;p&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">&quot;length on timeout---&quot;</span><span class="token punctuation">,</span> list<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">alert</span><span class="token punctuation">(</span><span class="token string">&quot;阻塞 timeout&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// 渲染之前</span>
+Promise<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> list <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementsByTagName</span><span class="token punctuation">(</span><span class="token string">&quot;p&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">&quot;length on promise.then ---&quot;</span><span class="token punctuation">,</span> list<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">&quot;end&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// 打印结果</span>
+<span class="token comment">// length---- 2</span>
+<span class="token comment">// start</span>
+<span class="token comment">// end</span>
+<span class="token comment">// length on promise.then--- 2</span>
+<span class="token comment">// length on timeout---- 2</span>
+</code></pre></div><p>nodejs 异步</p> <ul><li>Nodejs 同样使用 ES 语法，也是单线程，也是需要异步</li> <li>异步任务也分：宏任务 + 微任务</li> <li>但是，它的宏任务和微任务，分不同类型，有不同优先级</li></ul> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">// nodejs</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">&quot;start&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 宏任务</span>
+<span class="token function">setTimediate</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">&quot;setImmediate&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">&quot;timeout&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 微任务</span>
+Promise<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">&quot;promise then&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+process<span class="token punctuation">.</span><span class="token function">nextTick</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">&quot;nextTick&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">&quot;end&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// 打印结果</span>
+<span class="token comment">// end</span>
+<span class="token comment">// nextTick</span>
+<span class="token comment">// promise then</span>
+<span class="token comment">// timeout</span>
+<span class="token comment">// setImmediate</span>
+</code></pre></div><p>nodejs 宏任务类型和优先级</p> <ul><li>Timers - setTimeout setInterval</li> <li>I/O callbacks - 处理网络、流、TCP 的错误回调</li> <li>Idle, prepare - 闲置状态（nodejs 内部使用）</li> <li>Poll 轮询 - 执行 poll 中的 I/O 队列</li> <li>Check 检查 - 存储 setImmediate 回调</li> <li>Close callbacks - 关闭回调，如 socket.on(‘close’)</li></ul> <p>nodejs 微任务类型和优先级</p> <ul><li>包括：promise, async/await, process.nextTick</li> <li>注意，process.nextTick 优先级最高</li></ul> <blockquote><p>总结：nodejs event loop <code>事件循环</code></p> <ul><li>执行同步代码</li> <li>执行微任务（process.nextTick 优先级更高）</li> <li>按顺序执行 6 个类型的宏任务（每个开始之前都执行当前的微任务）</li> <li><code>推荐使用</code> setImmediate 代替 process.nextTick</li></ul></blockquote> <h2 id="_4-vdom-真的很快吗"><a href="#_4-vdom-真的很快吗" class="header-anchor">#</a> 4. vdom 真的很快吗？</h2> <p>vdom 是什么？</p> <ul><li>Virtual DOM，虚拟 DOM</li> <li>用 JS 对象模拟 DOM 节点数据</li> <li>由 React 最先推广使用</li></ul> <p>Vue React 等框架的价值</p> <ul><li>组件化</li> <li>数据视图分离，数据驱动视图 --- 这是核心!</li> <li>只关注业务数据，而不用再关系 DOM 变化</li> <li>数据驱动视图，技术方案: vdom</li></ul> <p>数据驱动视图的原理</p> <ul><li><p>当 data 数据变化</p></li> <li><p>diff 算法，去对比 vnode(当前 node 节点) 与 oldVnode</p></li> <li><p>找出要更新的点，去更新 DOM</p></li></ul> <p>从执行速度的角度看</p> <ul><li>jquery DOM 节点操作 比 数据驱动视图更快</li></ul> <p>从整个业务开发过程来看</p> <ul><li>数据驱动视图，减低了项目维护更新成本，从这个方面来说，数据驱动视图更快</li></ul> <blockquote><p>总结：</p> <ul><li>vdom 并不快，JS 直接操作 DOM 才是最快的</li> <li>但 “数据驱动视图” 要有合适的技术方案，不能全部 DOM 重建</li> <li>vdom 就是目前最合适的技术方案（并不是因为它快，而是合适）</li></ul></blockquote> <p><code>扩展: svelte 就不用 vdom</code></p> <h2 id="_5-遍历一个数组用-for-和-foreach-哪个更快"><a href="#_5-遍历一个数组用-for-和-foreach-哪个更快" class="header-anchor">#</a> 5. 遍历一个数组用 for 和 forEach 哪个更快？</h2> <ul><li>for 更快</li> <li>forEach 每次都要创建一个函数，而 for 不会创建函数</li> <li>函数需要独立的 typora 作用域，会有额外的开销</li></ul> <h2 id="_6-nodejs-如何开启进程-进程如何通讯"><a href="#_6-nodejs-如何开启进程-进程如何通讯" class="header-anchor">#</a> 6. nodejs 如何开启进程，进程如何通讯？</h2> <p>进程 proces vs 线程 thread</p> <ul><li>进程，OS 进行资源分配和调度的最小单位，有独立内存空间</li> <li>线程，OS 进行运算调度的最小单位，共享进程内存空间</li> <li>JS 是单线程的，但可以开启多进程执行，如 WebWorker</li></ul> <p>为何需要多进程？</p> <ul><li>多核 CPU, 更适合处理多进程</li> <li>内存较大，多个进程才能更好的利用（单进程有内存上线）</li> <li>总之，“压榨” 机器资源，更快，更节省</li></ul> <p>nodejs 如何开启进程，进程如何通讯？</p> <ul><li>开启子进程 child_process.fork 和 cluster.fork</li> <li>使用 send 和 on 传递消息</li></ul> <p>--- 通过 fork 开启多进程 ---</p> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token comment">// 主进程</span>
+<span class="token keyword">const</span> http <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;http&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> fork <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;child_process&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span>fork<span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> server <span class="token operator">=</span> http<span class="token punctuation">.</span><span class="token function">createServer</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">req<span class="token punctuation">,</span> res</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>req<span class="token punctuation">.</span>url <span class="token operator">===</span> <span class="token string">&quot;/get-sumn&quot;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">&quot;主进程  id&quot;</span><span class="token punctuation">,</span> process<span class="token punctuation">.</span>pid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 开启子进程</span>
+    <span class="token keyword">const</span> computeProcess <span class="token operator">=</span> <span class="token function">fork</span><span class="token punctuation">(</span><span class="token string">&quot;./compute.js&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    computeProcess<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token string">&quot;开始计算&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    computeProcess<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">&quot;message&quot;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">data</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+      console<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">&quot;主进程接收到的信息：&quot;</span><span class="token punctuation">,</span> data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      res<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token string">&quot;sum is&quot;</span> <span class="token operator">+</span> data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    computeProcess<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">&quot;close&quot;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">&quot;子进程因报错而退出&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      computeProcess<span class="token punctuation">.</span><span class="token function">kill</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      res<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token string">&quot;error&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+server<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token number">3000</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">&quot;localhost: 3000&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token comment">// 子进程 计算</span>
+<span class="token keyword">function</span> <span class="token function">getSum</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">let</span> sum <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10000</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    sum <span class="token operator">+=</span> i<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">return</span> sum<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+process<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">&quot;message&quot;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">data</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">&quot;子进程 id&quot;</span><span class="token punctuation">,</span> process<span class="token punctuation">.</span>pid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  console<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">&quot;子进程接收到的信息：&quot;</span><span class="token punctuation">,</span> data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">const</span> sum <span class="token operator">=</span> <span class="token function">getSum</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 发送信息给主进程</span>
+  process<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>sum<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>--- 通过 cluster 开启多进程 ---</p> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token keyword">const</span> http <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;http&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> cpuCoreLength <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;os&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">cpus</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>length<span class="token punctuation">;</span>
+<span class="token keyword">const</span> cluster <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;cluster&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">(</span>cluster<span class="token punctuation">.</span>isMaster<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> cpuCoreLength<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    cluster<span class="token punctuation">.</span><span class="token function">fork</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 开启子进程</span>
+  <span class="token punctuation">}</span>
+
+  cluster<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">&quot;exit&quot;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">worker</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">&quot;子进程退出&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    cluster<span class="token punctuation">.</span><span class="token function">fork</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//进程守护</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+  <span class="token comment">// 多个子进程 端口会不会冲突？不会</span>
+  <span class="token comment">// 因为多个子进程会共享一个 TCP 连接，提供一份网络服务</span>
+  <span class="token keyword">const</span> server <span class="token operator">=</span> http<span class="token punctuation">.</span><span class="token function">createServe</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">req<span class="token punctuation">,</span> res</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+    res<span class="token punctuation">.</span><span class="token function">writeHead</span><span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    res<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token string">&quot;done&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  server<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token number">3000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><blockquote><p>扩展：工作可以使用 <strong>PM2</strong> , 来开启多进程，进程守护</p></blockquote> <h2 id="_7-请描述-js-bridge-的实现原理"><a href="#_7-请描述-js-bridge-的实现原理" class="header-anchor">#</a> 7. 请描述 js-bridge 的实现原理</h2> <p>什么是 JS Bridge?</p> <ul><li>JS 无法直接调用 native API ( 获取视像头、获取相册等等接口 )</li> <li>需要通过一些特定的 &quot;格式&quot; 来调用</li> <li>这些 “格式” 就统称 JS-Bridge, 例如微信 JSSDK</li></ul> <p>JS Bridge 的常见实现方式</p> <ul><li>注册全局 API (不适用于 异步)</li> <li>URL Scheme (适用于 所有情况)</li></ul> <p>例如 uni-app（这个就是 URL Scheme 方式实现的）</p> <ul><li>weixin:// 打开微信</li> <li>weixin://dl/scan 扫一扫</li></ul> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token comment">// 封装 JS-bridge</span>
+<span class="token keyword">const</span> sdk <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token function">invoke</span><span class="token punctuation">(</span><span class="token parameter">url<span class="token punctuation">,</span> data <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> onSuccess<span class="token punctuation">,</span> onError</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">const</span> iframe <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">'iframe'</span><span class="token punctuation">)</span>
+        iframe<span class="token punctuation">.</span>style<span class="token punctuation">.</span>visibility <span class="token operator">=</span> <span class="token string">'hidden'</span>
+        iframe<span class="token punctuation">.</span><span class="token function-variable function">onload</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+            <span class="token keyword">const</span> content <span class="token operator">=</span> iframe1<span class="token punctuation">.</span>contentWindow<span class="token punctuation">.</span>document<span class="token punctuation">.</span>body<span class="token punctuation">.</span>innerHTML
+            onSuccess<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+        iframe<span class="token punctuation">.</span><span class="token function-variable function">onerror</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+            <span class="token function">onError</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+            iframe<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+        iframe<span class="token punctuation">.</span>src <span class="token operator">=</span> <span class="token string">'my-app-name://'</span>$<span class="token punctuation">{</span>url<span class="token punctuation">}</span><span class="token operator">?</span>data<span class="token operator">=</span>$<span class="token punctuation">{</span><span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token function">fn1</span><span class="token punctuation">(</span><span class="token parameter">data<span class="token punctuation">,</span> onSuccess<span class="token punctuation">,</span> onError</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span><span class="token string">'api/fn2'</span><span class="token punctuation">,</span> data<span class="token punctuation">,</span> onSuccess<span class="token punctuation">,</span> onError<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><blockquote><p>推荐使用 <code>URL Scheme</code></p></blockquote> <h2 id="_8-requestidlecallback-和-request"><a href="#_8-requestidlecallback-和-request" class="header-anchor">#</a> 8. requestIdleCallback 和 request</h2> <p>由 React fiber 引起的关注</p> <ul><li>组建树转换为链表，可分段渲染</li> <li>渲染时可以暂停，去执行其他高优任务，空闲时再继续渲染</li> <li>如何判断空闲？-- requestIdleCallback 这个 API</li></ul> <p>requestIdleCallback 和 requestAnimationFrame 的区别</p> <ul><li>requestAnimationFrame 每次渲染都会执行，高优</li> <li>requestIdleCallback 空闲时才执行，低优</li></ul> <div class="language-html extra-class"><pre class="language-html"><code>// requestIdleCallback 和 requestAnimationFrame 如何使用
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>btn1<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>change<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>box<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">&gt;</span></span><span class="token script"><span class="token language-javascript">
+    <span class="token keyword">const</span> box <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">&quot;box&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">&quot;btn1&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">&quot;click&quot;</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+      <span class="token keyword">let</span> curWidth <span class="token operator">=</span> <span class="token number">100</span><span class="token punctuation">;</span>
+      <span class="token keyword">const</span> maxWidth <span class="token operator">=</span> <span class="token number">400</span><span class="token punctuation">;</span>
+
+      <span class="token keyword">function</span> <span class="token function">addWidth</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        curWidth <span class="token operator">=</span> curWidth <span class="token operator">+</span> <span class="token number">3</span><span class="token punctuation">;</span>
+        box<span class="token punctuation">.</span>style<span class="token punctuation">.</span>width <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>curWidth<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">px</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>curWidth <span class="token operator">&lt;</span> maxWidth<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          window<span class="token punctuation">.</span><span class="token function">requestAnimationFrame</span><span class="token punctuation">(</span>addWidth<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 时间不用自己控制</span>
+          window<span class="token punctuation">.</span><span class="token function">requestIdleCallback</span><span class="token punctuation">(</span>addWidth<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+      <span class="token function">addWidth</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  </span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">&gt;</span></span>
+</code></pre></div><p>requestIdleCallback 和 requestAnimationFrame 两者是宏任务还是微任务？</p> <ul><li>两者都是宏任务</li> <li>要等待 DOM 渲染完成才执行，肯定是宏任务</li></ul> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token comment">// setTimeout、requestIdleCallback、requestAnimationFrame 的执行顺序</span>
+window<span class="token punctuation">.</span><span class="token function-variable function">onload</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">&quot;start&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">&quot;timeout&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  window<span class="token punctuation">.</span><span class="token function">requestIdleCallback</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">&quot;requestIdleCallback&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  window<span class="token punctuation">.</span><span class="token function">requestAnimationFrame</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">&quot;requestIdleCallback&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  console<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">&quot;end&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token comment">// 打印结果</span>
+<span class="token comment">// start</span>
+<span class="token comment">// end</span>
+<span class="token comment">// timeout</span>
+<span class="token comment">// requestIdleCallback</span>
+<span class="token comment">// requestIdleCallback</span>
+</code></pre></div><h2 id="_9-vue-每个生命周期都做了什么"><a href="#_9-vue-每个生命周期都做了什么" class="header-anchor">#</a> 9. Vue 每个生命周期都做了什么？</h2> <p>生命周期有哪些？</p> <ul><li>八个生命周期</li> <li>beforeCreate、created、beforeMount、mounted、beforeUpdate、updated、beforeUnmount、unmounted</li></ul> <p><img src="/assets/img/lifecycle.16e4c08e-1675342946107-2-1675342977248-5.1ae3c5f4.png" alt="img"></p> <p>每个生命周期都干了什么？</p> <p>beforeCreate</p> <ul><li>创建一个空白的 Vue 实例</li> <li>data method 尚未被初始化，不可使用</li></ul> <p>created</p> <ul><li>Vue 实例初始化完成，完成响应式绑定</li> <li>data method 都初始化完成，可调用</li> <li>尚未开始渲染模板</li></ul> <p>beforeMount</p> <ul><li>编译模板，调用 render 生成 vdom</li> <li>还没有开始渲染 DOM</li></ul> <p>mounted</p> <ul><li>完成 DOM 渲染</li> <li>组件创建完成</li> <li>开始由 “创建阶段” 进入 “运行阶段”</li></ul> <p>beforeUpdate</p> <ul><li>data 发生变化之后</li> <li>准备更新 DOM (尚未更新 DOM)</li></ul> <p>updated</p> <ul><li>data 发生变化，且 DOM 更新完成</li> <li>不要在 updated 中修改 data，可能会导致死循环（ updata 中修改 data，重新 updata, 又修改 data ）</li></ul> <p>beforeUnmount</p> <ul><li>组件进入销毁阶段（尚未销毁，可正常使用）</li> <li>可移除、解绑一些全局事件、自定义事件</li></ul> <p>unmounted</p> <ul><li>组件被销毁了</li> <li>所有子组件也都被销毁了</li></ul> <p>扩展：keep-alive 组件生命周期（created 中 只创建一次）</p> <ul><li>onActivated 缓存组件被激活</li> <li>onDeactivated 缓存组件被隐藏</li></ul> <p>连环问？</p> <p>Vue 什么时候操作 DOM 比较合适？</p> <ul><li>mounted 和 updated 都不能保证子组件全部挂载完成</li> <li>使用 $nextTick 渲染 DOM</li></ul> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token function">mounted</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">$nextTick</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token comment">// 仅在整个视图都渲染之后才会运行的代码</span>
+	<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>Ajax 应该在哪个生命周期？</p> <ul><li>有两个选择：created 和 mounted</li> <li>推荐：mounted</li></ul> <p>Vue3 Composition API 生命周期有何区别？</p> <ul><li>setup 代替了 beforeCreate 和 created</li> <li>使用 Hooks 函数的形式，如 mounted 改为 onMounted()</li></ul> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token comment">// Composition API</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> onUpdated<span class="token punctuation">,</span> onMounted <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&quot;vue&quot;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">{</span>
+  <span class="token function">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">onMounted</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">&quot;mounted&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">onUpdated</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">&quot;updated&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre></div><h2 id="_10-vue2、vue3、react-三者-diff-算法有何区别"><a href="#_10-vue2、vue3、react-三者-diff-算法有何区别" class="header-anchor">#</a> 10. Vue2、Vue3、React 三者 diff 算法有何区别？</h2> <p>diff 算法</p> <ul><li><p>diff 算法很早就有</p></li> <li><p>diff 算法应用广泛，例如 github 的 Pull Request 中的代码 diff</p></li> <li><p>如果要严格 diff 两棵树，时间复杂度 O(n^3)，不可用</p></li></ul> <p>Tree diff 的优化，优化后时间复杂度降为 O(n)</p> <ul><li>只比较同一层级，不跨级比较</li> <li>tag 不同则删除重建 (不再去比较内部的细节)</li> <li>子节点通过 key 区分 (key 的重要性)</li></ul> <p>学习技巧</p> <ul><li>diff 算法非常复杂，不要深究细节</li> <li>既然是三者的比较，说出他们最大的不同即可</li></ul> <p>React diff - 仅右移</p> <p>Vue2 - 双端比较（减少移动开销）</p> <p>Vue3 - 最长递增子序列（减少 DOM 操作）</p> <blockquote><p>diff 算法原理的核心在于 减少 DOM 操作</p></blockquote> <p>连环问</p> <p>Vue React 为何循环时必须使用 key ?</p> <ul><li>vdom diff 算法会根据 key 判断元素是否删除？</li> <li>匹配了 key, 则只移动元素 - 性能较好</li> <li>为匹配 key, 则删除重建 - 性能较差</li></ul> <h2 id="_11-vue-router-memoryhistory-abstract"><a href="#_11-vue-router-memoryhistory-abstract" class="header-anchor">#</a> 11. Vue-router MemoryHistory (abstract)</h2> <p>Vue-router 三种模式</p> <ul><li>Hash (带 # 号，<code>locahost:8080/#/about</code>)</li> <li>WebHistory (不带 # 号，<code>locahost:8080/about</code>)</li> <li>MemoryHistory (V4 之前叫做 abstract history)</li></ul> <p>MemoeyHistory 将路由当成一个整体一样，不会有路由 (url) 的变化</p> <div class="language-javascript extra-class"><pre class="language-javascript"><code><span class="token comment">// MemoeyHistory 实现方式</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> createWebHashHistory <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&quot;vue-router&quot;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> routes <span class="token operator">=</span> <span class="token punctuation">[</span>
+  <span class="token punctuation">{</span>
+    <span class="token literal-property property">path</span><span class="token operator">:</span> <span class="token string">&quot;/&quot;</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">&quot;Home&quot;</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">component</span><span class="token operator">:</span> Home<span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span>
+    <span class="token literal-property property">path</span><span class="token operator">:</span> <span class="token string">&quot;/about&quot;</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">&quot;About&quot;</span><span class="token punctuation">,</span>
+    <span class="token function-variable function">component</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token keyword">import</span><span class="token punctuation">(</span><span class="token string">&quot;../views/About.vue&quot;</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> router <span class="token operator">=</span> <span class="token function">createRouter</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  <span class="token literal-property property">history</span><span class="token operator">:</span> <span class="token function">createWebHashHistory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  routes<span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> router<span class="token punctuation">;</span>
+</code></pre></div></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">Last Updated:</span> <span class="time">2/16/2023, 3:15:33 AM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/interview/知识广度-从前端到全栈.html" class="prev">
+        知识广度
+      </a></span> <span class="next"><a href="/interview/编写高质量代码-正确、完整、清晰、鲁棒.html">
+        编写代码
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.dfba7f66.js" defer></script><script src="/assets/js/2.d548555d.js" defer></script><script src="/assets/js/15.3145e545.js" defer></script>
+  </body>
+</html>
