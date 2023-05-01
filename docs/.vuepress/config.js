@@ -9,7 +9,23 @@ module.exports = {
   themeConfig: {
     nav: [
       { text: "主页", link: "/" },
-      { text: "大前端", link: "/bigFront/" },
+      {
+        text: "基础入门",
+        items: [
+          {
+            text: "sass 入门",
+            link: "/introduction/sass 入门",
+          },
+          {
+            text: "TypeScript 入门",
+            link: "/introduction/TypeScript 入门",
+          },
+          {
+            text: "React 入门",
+            link: "/introduction/React 入门",
+          },
+        ],
+      },
       {
         text: "开发工具",
         items: [
