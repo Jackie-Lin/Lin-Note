@@ -1,6 +1,6 @@
 ## 使用流程
 
-<img src="../../images/image-20230304135833899.png" alt="image-20230304135833899" style="zoom:80%;" />
+<img src="assets/image-20230304135833899.png" alt="image-20230304135833899" style="zoom:80%;" />
 
 
 
@@ -60,7 +60,7 @@ sass --version
 sass test.scss
 ```
 
-<img src="../../images/image-20230304142942981.png" alt="image-20230304142942981" style="zoom: 70%;" />	
+<img src="assets/image-20230304142942981.png" alt="image-20230304142942981" style="zoom: 70%;" />	
 
 
 
@@ -69,7 +69,7 @@ sass test.scss
 sass test.scss test.css
 ```
 
-<img src="../../images/image-20230304143107773.png" alt="image-20230304143107773" style="zoom: 80%;" />	
+<img src="assets/image-20230304143107773.png" alt="image-20230304143107773" style="zoom: 80%;" />	
 
 
 
